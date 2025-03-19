@@ -1,10 +1,11 @@
+
 import React from "react";
 import { Layout } from "@/components/Layout";
 import { DroneStatus } from "@/components/DroneStatus";
 import { MapView } from "@/components/MapView";
 import { ActionButton } from "@/components/ActionButton";
 import { Link, useParams } from "react-router-dom";
-import { ChevronLeftIcon, MoreVerticalIcon, PhoneIcon, ShareIcon, HelpCircleIcon, BatteryMediumIcon, Clock, UploadIcon } from "lucide-react";
+import { ChevronLeftIcon, MoreVerticalIcon, PhoneIcon, ShareIcon, HelpCircleIcon, BatteryMediumIcon, Clock, UploadIcon, Settings } from "lucide-react";
 
 const DroneDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -20,9 +21,12 @@ const DroneDetail = () => {
             <ChevronLeftIcon className="h-5 w-5" />
           </Link>
           <h1 className="text-xl font-bold text-center flex-1">VT-1</h1>
-          <button className="h-10 w-10 flex items-center justify-center rounded-full bg-white border border-gray-100 shadow-sm text-gray-600 hover:text-gray-900 transition-colors">
-            <MoreVerticalIcon className="h-5 w-5" />
-          </button>
+          <Link 
+            to="/settings" 
+            className="h-10 w-10 flex items-center justify-center rounded-full bg-white border border-gray-100 shadow-sm text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            <Settings className="h-5 w-5" />
+          </Link>
         </header>
 
         <div className="space-y-8">
