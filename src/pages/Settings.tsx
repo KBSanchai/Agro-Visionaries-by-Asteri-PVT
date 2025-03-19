@@ -36,9 +36,9 @@ const Settings = () => {
         <div className="space-y-8">
           <div className="relative w-full py-6 overflow-hidden flex justify-center">
             <img 
-              src="/lovable-uploads/eccadf70-5cbb-40dd-a5cf-c79c35404a63.png" 
-              alt="VT-1 Drone" 
-              className="h-40 object-contain"
+              src="/lovable-uploads/f0b2a305-d7e0-4e32-b044-e5937a84b426.png" 
+              alt="Agricultural Drone" 
+              className="h-48 object-contain animate-float"
             />
           </div>
 
