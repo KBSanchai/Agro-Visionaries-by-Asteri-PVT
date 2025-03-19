@@ -1,11 +1,10 @@
-
 import React from "react";
 import { Layout } from "@/components/Layout";
 import { DroneStatus } from "@/components/DroneStatus";
 import { MapView } from "@/components/MapView";
 import { ActionButton } from "@/components/ActionButton";
 import { Link, useParams } from "react-router-dom";
-import { ChevronLeftIcon, MoreVerticalIcon, PhoneIcon, ShareIcon, HelpCircleIcon, BatteryMediumIcon, AlarmIcon, UploadIcon } from "lucide-react";
+import { ChevronLeftIcon, MoreVerticalIcon, PhoneIcon, ShareIcon, HelpCircleIcon, BatteryMediumIcon, Clock, UploadIcon } from "lucide-react";
 
 const DroneDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -75,7 +74,7 @@ const DroneDetail = () => {
               label="Battery saver" 
             />
             <ActionButton 
-              icon={<AlarmIcon className="h-5 w-5" />} 
+              icon={<Clock className="h-5 w-5" />} 
               label="SOS" 
               variant="danger"
             />
