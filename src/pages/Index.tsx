@@ -6,6 +6,7 @@ import { FieldCard } from "@/components/FieldCard";
 import { ControlModes } from "@/components/ControlModes";
 import { ChevronRightIcon, Droplet, ThermometerIcon, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const Index = () => {
   const [controlMode, setControlMode] = useState<"A" | "M" | "C">("A");
@@ -18,7 +19,10 @@ const Index = () => {
             <h1 className="text-2xl font-bold text-gray-900">Sanjay</h1>
             <p className="text-sm text-gray-500">Welcome</p>
           </div>
-          <div className="h-10 w-10 bg-drone-gray rounded-full"></div>
+          <Avatar>
+            <AvatarImage src="/lovable-uploads/3a1986cd-6e58-41bf-8897-64b18a7f6613.png" alt="Profile" />
+            <AvatarFallback className="bg-drone-gray">SJ</AvatarFallback>
+          </Avatar>
         </header>
 
         <DroneBadge id="vt1" name="VT-1" isActive={true} />
