@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import DroneDetail from "./pages/DroneDetail";
 import CropHealth from "./pages/CropHealth";
 import FieldMap from "./pages/FieldMap";
+import Navigation from "./pages/Navigation";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/drone/:id" element={<DroneDetail />} />
           <Route path="/health" element={<CropHealth />} />
           <Route path="/field/:id" element={<FieldMap />} />
+          <Route path="/navigation" element={<Navigation />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
