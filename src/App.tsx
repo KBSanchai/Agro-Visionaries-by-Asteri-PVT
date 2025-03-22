@@ -10,6 +10,7 @@ import CropHealth from "./pages/CropHealth";
 import FieldMap from "./pages/FieldMap";
 import Navigation from "./pages/Navigation";
 import Settings from "./pages/Settings";
+import Chatbot from "./pages/Chatbot";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/field/:id" element={<FieldMap />} />
           <Route path="/navigation" element={<Navigation />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/chatbot" element={<Chatbot />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
