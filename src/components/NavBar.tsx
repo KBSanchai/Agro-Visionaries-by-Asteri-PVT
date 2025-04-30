@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, MapPin, Leaf, MessageCircleIcon } from "lucide-react";
+import { Home, MapPin, Leaf, MessageCircleIcon, CloudSun } from "lucide-react";
 
 export const NavBar: React.FC = () => {
   const location = useLocation();
@@ -13,6 +13,7 @@ export const NavBar: React.FC = () => {
         <NavItem to="/" icon={<Home className="w-6 h-6" />} isActive={isActive("/")} label="Home" />
         <NavItem to="/navigation" icon={<MapPin className="w-6 h-6" />} isActive={isActive("/navigation")} label="Map" />
         <NavItem to="/health" icon={<Leaf className="w-6 h-6" />} isActive={isActive("/health")} label="Health" />
+        <NavItem to="/weather-spirit" icon={<CloudSun className="w-6 h-6" />} isActive={isActive("/weather-spirit")} label="Weather" />
         <NavItem to="/chatbot" icon={<MessageCircleIcon className="w-6 h-6" />} isActive={isActive("/chatbot")} label="Assistant" />
       </div>
     </div>
