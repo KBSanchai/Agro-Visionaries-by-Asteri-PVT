@@ -80,11 +80,47 @@ const weatherTips = {
   ],
 };
 
+// Crop advice based on weather type
+const cropAdvice = {
+  sunny: [
+    { crop: "Tomatoes", advice: "Add extra mulch to retain soil moisture" },
+    { crop: "Wheat", advice: "Great day for harvesting and drying" },
+    { crop: "Peppers", advice: "Consider shade cloth during peak hours" },
+  ],
+  cloudy: [
+    { crop: "Lettuce", advice: "Perfect day for planting leafy greens" },
+    { crop: "Cabbage", advice: "Apply pest management treatments today" },
+    { crop: "Spinach", advice: "Water lightly if soil appears dry" },
+  ],
+  rainy: [
+    { crop: "Rice", advice: "Check paddy water levels" },
+    { crop: "Root vegetables", advice: "Ensure proper drainage" },
+    { crop: "Beans", advice: "Watch for signs of rust" },
+  ],
+  stormy: [
+    { crop: "All crops", advice: "Inspect for damage after storm" },
+    { crop: "Tall crops", advice: "Consider staking or support" },
+    { crop: "Fruit trees", advice: "Check for broken branches" },
+  ],
+  cold: [
+    { crop: "Winter wheat", advice: "Monitor for frost heaving" },
+    { crop: "Peas", advice: "Add row covers during frost advisories" },
+    { crop: "Citrus", advice: "Be ready to protect from frost" },
+  ],
+  hot: [
+    { crop: "Corn", advice: "Increase irrigation frequency" },
+    { crop: "Cucumbers", advice: "Provide afternoon shade" },
+    { crop: "Melons", advice: "Water deeply at base, avoid wetting foliage" },
+  ],
+};
+
 const WeatherSpiritPage: React.FC = () => {
   const [currentWeather, setCurrentWeather] = useState(mockWeather.current);
   const [forecast, setForecast] = useState(mockWeather.forecast);
   const [timeOfDay, setTimeOfDay] = useState<"morning" | "day" | "evening" | "night">("day");
   const [showChat, setShowChat] = useState(false);
+  const [activeChatMode, setActiveChatMode] = useState<"weather" | "crop">("weather");
+  const [chatExpanded, setChatExpanded] = useState(false);
 
   // Determine time of day for UI theming
   useEffect(() => {
@@ -109,6 +145,52 @@ const WeatherSpiritPage: React.FC = () => {
     day: "text-gray-900",
     evening: "text-gray-800",
     night: "text-white",
+  };
+
+  // Handle weather tips button click
+  const handleWeatherTipsClick = () => {
+    setActiveChatMode("weather");
+    setShowChat(true);
+    setChatExpanded(true);
+  };
+
+  // Handle crop advice button click
+  const handleCropAdviceClick = () => {
+    setActiveChatMode("crop");
+    setShowChat(true);
+    setChatExpanded(true);
+  };
+
+  // Get content based on active chat mode
+  const getChatContent = () => {
+    if (activeChatMode === "weather") {
+      return (
+        <>
+          <h3 className="text-sm font-medium mb-3">Weather Tips</h3>
+          <div className="space-y-3">
+            {weatherTips[currentWeather.type].map((tip, index) => (
+              <div key={index} className="p-2 bg-white bg-opacity-10 rounded-lg backdrop-blur-sm">
+                <p className="text-sm">{tip}</p>
+              </div>
+            ))}
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <h3 className="text-sm font-medium mb-3">Crop Advice</h3>
+          <div className="space-y-3">
+            {cropAdvice[currentWeather.type].map((item, index) => (
+              <div key={index} className="p-2 bg-white bg-opacity-10 rounded-lg backdrop-blur-sm">
+                <p className="text-sm font-medium">{item.crop}</p>
+                <p className="text-xs opacity-90">{item.advice}</p>
+              </div>
+            ))}
+          </div>
+        </>
+      );
+    }
   };
 
   return (
@@ -161,7 +243,7 @@ const WeatherSpiritPage: React.FC = () => {
           </div>
 
           {/* Current Weather */}
-          <Card className="bg-white bg-opacity-20 backdrop-blur-md border border-white border-opacity-20 shadow-lg p-4 mb-6">
+          <Card className="bg-white bg-opacity-20 backdrop-blur-md border border-white border-opacity-20 shadow-lg p-4 mb-6 transition-all duration-300 hover:bg-opacity-30">
             <div className="flex items-center justify-between mb-2">
               <h2 className={`text-lg font-semibold ${textClasses[timeOfDay]}`}>
                 Current Weather
@@ -212,7 +294,7 @@ const WeatherSpiritPage: React.FC = () => {
           </div>
 
           {/* Weather Forecast */}
-          <Card className="bg-white bg-opacity-20 backdrop-blur-md border border-white border-opacity-20 shadow-lg p-4 mb-6">
+          <Card className="bg-white bg-opacity-20 backdrop-blur-md border border-white border-opacity-20 shadow-lg p-4 mb-6 transition-all duration-300 hover:bg-opacity-30">
             <div className="flex items-center justify-between mb-4">
               <h2 className={`text-lg font-semibold ${textClasses[timeOfDay]}`}>
                 7-Day Forecast
@@ -238,7 +320,7 @@ const WeatherSpiritPage: React.FC = () => {
           <div className="fixed bottom-20 right-4 z-20">
             <Button 
               onClick={() => setShowChat(!showChat)}
-              className="h-12 w-12 rounded-full bg-green-500 hover:bg-green-600 shadow-lg flex items-center justify-center"
+              className="h-12 w-12 rounded-full bg-gradient-to-r from-green-400 to-green-500 hover:from-green-500 hover:to-green-600 shadow-lg flex items-center justify-center transform transition-all duration-300 hover:scale-105 active:scale-95"
             >
               <MessageCircle className="h-6 w-6 text-white" />
             </Button>
@@ -246,29 +328,54 @@ const WeatherSpiritPage: React.FC = () => {
 
           {/* Chat Dialog */}
           {showChat && (
-            <div className="fixed bottom-36 right-4 bg-white rounded-lg shadow-xl p-4 w-[300px] z-20 animate-fade-in">
-              <div className="flex items-center mb-3">
-                <div className="mr-2">
-                  {currentWeather.type === "sunny" ? "☀️" : 
-                   currentWeather.type === "cloudy" ? "⛅" :
-                   currentWeather.type === "rainy" ? "🌧️" : "🌤️"}
+            <div className={`fixed bottom-36 right-4 bg-white/10 backdrop-blur-md rounded-lg shadow-xl border border-white/20 p-4 transition-all duration-300 ${chatExpanded ? 'w-[300px] h-[400px]' : 'w-[300px]'} z-20 animate-fade-in`}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center">
+                  <div className="mr-2">
+                    {currentWeather.type === "sunny" ? "☀️" : 
+                     currentWeather.type === "cloudy" ? "⛅" :
+                     currentWeather.type === "rainy" ? "🌧️" : "🌤️"}
+                  </div>
+                  <p className="text-sm font-medium text-white">
+                    {!chatExpanded && (currentWeather.type === "sunny" 
+                      ? "It's sunny and bright today—perfect for airing out your grains. Want a crop tip for this weather?"
+                      : currentWeather.type === "rainy"
+                      ? "Rain's coming down! Let's talk about water management for your crops."
+                      : "How can I help with your farming today?")}
+                  </p>
                 </div>
-                <p className="text-sm font-medium">
-                  {currentWeather.type === "sunny" 
-                    ? "It's sunny and bright today—perfect for airing out your grains. Want a crop tip for this weather?"
-                    : currentWeather.type === "rainy"
-                    ? "Rain's coming down! Let's talk about water management for your crops."
-                    : "How can I help with your farming today?"}
-                </p>
+                <button 
+                  onClick={() => setChatExpanded(!chatExpanded)}
+                  className="text-white hover:bg-white/20 rounded-full p-1 transition-colors"
+                >
+                  {chatExpanded ? '🔽' : '🔼'}
+                </button>
               </div>
-              <div className="flex space-x-2 mt-2">
-                <Button size="sm" variant="outline" className="text-xs flex-1">
-                  Weather tips
-                </Button>
-                <Button size="sm" variant="outline" className="text-xs flex-1">
-                  Crop advice
-                </Button>
-              </div>
+              
+              {chatExpanded ? (
+                <div className="h-[320px] overflow-auto pr-1 scrollbar-thin">
+                  {getChatContent()}
+                </div>
+              ) : (
+                <div className="flex space-x-2 mt-2">
+                  <Button 
+                    onClick={handleWeatherTipsClick}
+                    size="sm" 
+                    variant="outline" 
+                    className="text-xs flex-1 bg-white/5 text-white border-white/20 hover:bg-white/20 transition-all duration-300"
+                  >
+                    Weather tips
+                  </Button>
+                  <Button 
+                    onClick={handleCropAdviceClick}
+                    size="sm" 
+                    variant="outline" 
+                    className="text-xs flex-1 bg-white/5 text-white border-white/20 hover:bg-white/20 transition-all duration-300"
+                  >
+                    Crop advice
+                  </Button>
+                </div>
+              )}
             </div>
           )}
         </div>
