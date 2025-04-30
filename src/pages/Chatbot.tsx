@@ -65,7 +65,7 @@ const Chatbot = () => {
         setIsLoading(false);
         toast({
           title: "API Key Required",
-          description: "Please enter your OpenAI API key to continue",
+          description: "Please enter your Together.ai API key to continue",
         });
         return;
       }
@@ -129,20 +129,21 @@ const Chatbot = () => {
             Agri Assistant
           </h1>
           <p className="text-sm text-gray-500">Your farming guidance companion</p>
+          <p className="text-xs text-gray-400 mt-1">Powered by Together.ai</p>
         </header>
 
         {showApiKeyInput ? (
           <div className="bg-white rounded-xl p-4 shadow-sm mb-4">
-            <h2 className="text-lg font-medium mb-2">Enter OpenAI API Key</h2>
+            <h2 className="text-lg font-medium mb-2">Enter Together.ai API Key</h2>
             <p className="text-sm text-gray-500 mb-4">
-              Your API key is stored locally and only used to make requests to OpenAI.
+              Your API key is stored locally and only used to make requests to Together.ai.
             </p>
             <div className="space-y-4">
               <Input
                 type="password"
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
-                placeholder="sk-..."
+                placeholder="togetherapi_..."
                 className="w-full"
               />
               <Button onClick={saveApiKey} className="w-full">

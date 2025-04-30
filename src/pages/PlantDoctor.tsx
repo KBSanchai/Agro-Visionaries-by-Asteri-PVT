@@ -1,273 +1,223 @@
-
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Upload, Send, Camera, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { 
+  Plant, Upload, Leaf, AlertCircle, Check, Loader2, Camera 
+} from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChatService } from "@/utils/ChatService";
 
 const PlantDoctor = () => {
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [textDescription, setTextDescription] = useState("");
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [diagnosisResult, setDiagnosisResult] = useState<{
-    diagnosis: string;
-    solution: string;
-    confidence: number;
-  } | null>(null);
+  const [image, setImage] = useState<string | null>(null);
+  const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [diagnosis, setDiagnosis] = useState<string | null>(null);
+  const [apiKey, setApiKey] = useState("");
+  const [showApiKeyInput, setShowApiKeyInput] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Check if the file is an image
-    if (!file.type.startsWith("image/")) {
-      toast({
-        title: "Invalid file type",
-        description: "Please upload an image file",
-        variant: "destructive",
-      });
-      return;
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
-
-    setImageFile(file);
-    const imageUrl = URL.createObjectURL(file);
-    setImagePreview(imageUrl);
   };
-
-  const removeImage = () => {
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
-    setImageFile(null);
-    setImagePreview(null);
+  
+  const handleOpenFileDialog = () => {
+    fileInputRef.current?.click();
   };
-
-  const handleTextSubmit = async () => {
-    if (!textDescription.trim()) {
-      toast({
-        title: "Missing description",
-        description: "Please describe the plant issue",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    await analyzePlantIssue(textDescription);
-  };
-
-  const handleImageSubmit = async () => {
-    if (!imageFile) {
-      toast({
-        title: "No image selected",
-        description: "Please upload an image of the plant issue",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // For image-based diagnosis, we'll create a text prompt based on the image
-    const imagePrompt = `[This is an image-based analysis of a crop/plant that may have issues. Please analyze as if you can see the image and provide a diagnosis and solution based on common crop issues.]`;
+  
+  const handleImageSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     
-    await analyzePlantIssue(imagePrompt);
-  };
-
-  const analyzePlantIssue = async (prompt: string) => {
-    setIsAnalyzing(true);
-    setDiagnosisResult(null);
+    if (!image && !description) {
+      toast({
+        title: "Missing information",
+        description: "Please provide an image or description of the plant issue.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setLoading(true);
     
     try {
-      // Create a prompt specifically for plant diagnosis
-      const diagnosisPrompt = `Act as an agricultural expert specializing in plant pathology. 
-      A farmer is showing you a crop with potential issues. 
-      Based on this description: "${prompt}", 
-      provide a diagnosis of the most likely issue affecting the plant, 
-      suggest a solution using environmentally friendly methods when possible, 
-      and rate your confidence level from 1-100%. 
-      Format your response in JSON: 
-      {
-        "diagnosis": "detailed diagnosis",
-        "solution": "step by step solution",
-        "confidence": confidence percentage as a number
-      }`;
-      
-      const response = await ChatService.sendMessage(diagnosisPrompt);
-      
-      // Extract JSON from the response
-      try {
-        // The response might contain markdown codeblocks or other text
-        const jsonMatch = response.match(/\{[\s\S]*\}/);
-        const jsonString = jsonMatch ? jsonMatch[0] : response;
-        const result = JSON.parse(jsonString);
-        
-        setDiagnosisResult({
-          diagnosis: result.diagnosis,
-          solution: result.solution,
-          confidence: result.confidence || 70, // Default confidence if missing
-        });
-      } catch (parseError) {
-        console.error("Failed to parse response as JSON:", parseError);
-        
-        // Fallback: Split the response into sections
-        const sections = response.split('\n\n');
-        setDiagnosisResult({
-          diagnosis: sections[0] || "Could not determine diagnosis",
-          solution: sections[1] || "No specific solution provided",
-          confidence: 50, // Default confidence for fallback
-        });
-      }
+      const result = await analyzePlantIssue(image, description);
+      setDiagnosis(result);
     } catch (error) {
       console.error("Error analyzing plant issue:", error);
       toast({
-        title: "Analysis Error",
-        description: "Failed to analyze the plant issue. Please check your API key and try again.",
+        title: "Analysis failed",
+        description: "There was an error analyzing your plant issue. Please try again.",
         variant: "destructive",
       });
     } finally {
-      setIsAnalyzing(false);
+      setLoading(false);
     }
   };
-
+  
+  const analyzePlantIssue = async (imageUrl: string | null, description: string) => {
+    // Check if API key is available
+    const savedApiKey = ChatService.getApiKey();
+    
+    if (!savedApiKey) {
+      setShowApiKeyInput(true);
+      throw new Error("API key not found");
+    }
+    
+    if (apiKey && !ChatService.getApiKey()) {
+      ChatService.saveApiKey(apiKey);
+    }
+    
+    let prompt = "I need help diagnosing an issue with my plant or crop. ";
+    
+    if (description) {
+      prompt += `Here's a description of what I'm seeing: ${description}. `;
+    }
+    
+    if (imageUrl) {
+      prompt += "I've also uploaded an image of the plant showing the concerning areas. Based on the image and description, can you: 1) Identify the likely issue (disease, pest, deficiency, etc.), 2) Suggest immediate actions to take, and 3) Provide preventative measures for the future?";
+    } else {
+      prompt += "Based on this description, can you: 1) Identify the likely issue (disease, pest, deficiency, etc.), 2) Suggest immediate actions to take, and 3) Provide preventative measures for the future?";
+    }
+    
+    // Use the ChatService for text analysis
+    try {
+      const response = await ChatService.sendMessage(prompt, []);
+      return response;
+    } catch (error) {
+      console.error("Error using ChatService:", error);
+      throw error;
+    }
+  };
+  
+  const saveApiKey = () => {
+    if (!apiKey.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid API key",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    ChatService.saveApiKey(apiKey);
+    setShowApiKeyInput(false);
+    toast({
+      title: "Success", 
+      description: "API key saved successfully!",
+    });
+    
+    // If we had an ongoing diagnosis attempt, retry it
+    if (image || description) {
+      handleImageSubmit(new Event("submit") as unknown as React.FormEvent);
+    }
+  };
+  
+  const resetDiagnosis = () => {
+    setImage(null);
+    setDescription("");
+    setDiagnosis(null);
+  };
+  
   return (
     <Layout>
-      <div className="max-w-md mx-auto px-4 py-6 flex flex-col h-[calc(100vh-80px)]">
-        <header className="mb-4">
-          <h1 className="text-2xl font-bold text-gray-900">Plant Doctor</h1>
-          <p className="text-sm text-gray-500">
-            Diagnose and treat plant issues with AI assistance
-          </p>
+      <div className="max-w-md mx-auto px-4 py-6">
+        <header className="mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Plant Doctor</h1>
+              <p className="text-sm text-gray-500">Diagnose your crop's health issues</p>
+              <p className="text-xs text-gray-400 mt-1">Powered by Together.ai</p>
+            </div>
+            <div className="bg-green-100 p-2 rounded-full">
+              <Plant className="h-6 w-6 text-green-600" />
+            </div>
+          </div>
         </header>
-
-        {!diagnosisResult ? (
-          <Tabs defaultValue="image" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="image">
-                <Camera className="h-4 w-4 mr-2" /> Photo Diagnosis
-              </TabsTrigger>
-              <TabsTrigger value="text">
-                <Send className="h-4 w-4 mr-2" /> Text Description
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="image" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Upload Photo</CardTitle>
-                  <CardDescription>
-                    Take or upload a clear photo of the affected plant
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {imagePreview ? (
-                    <div className="relative">
-                      <img
-                        src={imagePreview}
-                        alt="Plant preview"
-                        className="w-full h-64 object-cover rounded-md"
-                      />
-                      <button
-                        onClick={removeImage}
-                        className="absolute top-2 right-2 bg-black bg-opacity-50 rounded-full p-1"
-                      >
-                        <X className="h-5 w-5 text-white" />
-                      </button>
+        
+        {showApiKeyInput ? (
+          <Card className="p-4 mb-6">
+            <h2 className="text-lg font-medium mb-2">Enter Together.ai API Key</h2>
+            <p className="text-sm text-gray-500 mb-4">
+              Your API key is stored locally and only used to make requests to Together.ai.
+            </p>
+            <Input
+              type="password"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder="togetherapi_..."
+              className="mb-4"
+            />
+            <Button onClick={saveApiKey} className="w-full">
+              Save API Key
+            </Button>
+          </Card>
+        ) : diagnosis ? (
+          <Card className="p-4 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-medium">Diagnosis Result</h2>
+              <Check className="h-5 w-5 text-green-500" />
+            </div>
+            <ScrollArea className="mb-4 h-48">
+              <p className="text-sm text-gray-800 whitespace-pre-wrap">{diagnosis}</p>
+            </ScrollArea>
+            <Button onClick={resetDiagnosis} variant="secondary" className="w-full">
+              Analyze Another Plant
+            </Button>
+          </Card>
+        ) : (
+          <Card className="p-4 mb-6">
+            <form onSubmit={handleImageSubmit} className="space-y-4">
+              <div className="flex items-center justify-center bg-gray-50 rounded-md border border-dashed border-gray-300 p-4">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  ref={fileInputRef}
+                />
+                <Button variant="ghost" size="sm" onClick={handleOpenFileDialog}>
+                  {image ? (
+                    <div className="flex flex-col items-center">
+                      <img src={image} alt="Uploaded Plant" className="max-h-32 max-w-32 rounded-md mb-2" />
+                      <p className="text-xs text-gray-500">Change Image</p>
                     </div>
                   ) : (
-                    <div className="border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center">
-                      <Upload className="h-10 w-10 text-gray-400 mb-2" />
-                      <p className="text-sm text-gray-500 mb-2">
-                        Click to upload or drag and drop
-                      </p>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                      />
+                    <div className="flex flex-col items-center">
+                      <Camera className="h-6 w-6 text-gray-400 mb-1" />
+                      <p className="text-sm text-gray-500">Upload Plant Image</p>
                     </div>
                   )}
-                </CardContent>
-                <CardFooter>
-                  <Button 
-                    onClick={handleImageSubmit} 
-                    className="w-full"
-                    disabled={!imageFile || isAnalyzing}
-                  >
-                    {isAnalyzing ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" /> Analyzing...
-                      </>
-                    ) : (
-                      "Diagnose Issue"
-                    )}
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="text" className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Describe Symptoms</CardTitle>
-                  <CardDescription>
-                    Provide details about what you're seeing on your plants
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Textarea
-                    placeholder="E.g., My rice plants have yellow spots on the leaves and the edges are turning brown..."
-                    value={textDescription}
-                    onChange={(e) => setTextDescription(e.target.value)}
-                    className="min-h-[150px]"
-                  />
-                </CardContent>
-                <CardFooter>
-                  <Button 
-                    onClick={handleTextSubmit} 
-                    className="w-full"
-                    disabled={!textDescription.trim() || isAnalyzing}
-                  >
-                    {isAnalyzing ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" /> Analyzing...
-                      </>
-                    ) : (
-                      "Diagnose Issue"
-                    )}
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        ) : (
-          <Card className="animate-fade-in">
-            <CardHeader>
-              <CardTitle>Diagnosis Results</CardTitle>
-              <CardDescription>
-                Analysis completed with {diagnosisResult.confidence}% confidence
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-medium text-lg mb-2">Issue Identified</h3>
-                <p className="text-gray-700">{diagnosisResult.diagnosis}</p>
+                </Button>
               </div>
-              <div>
-                <h3 className="font-medium text-lg mb-2">Recommended Solution</h3>
-                <p className="text-gray-700">{diagnosisResult.solution}</p>
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-between">
-              <Button variant="outline" onClick={() => setDiagnosisResult(null)}>
-                Start New Diagnosis
+              <Textarea
+                placeholder="Describe the plant issue (optional)"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+              <Button disabled={loading} className="w-full">
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Analyzing...
+                  </>
+                ) : (
+                  <>
+                    Analyze Plant <Leaf className="ml-2 h-4 w-4" />
+                  </>
+                )}
               </Button>
-              <Button>Save Report</Button>
-            </CardFooter>
+            </form>
           </Card>
         )}
       </div>

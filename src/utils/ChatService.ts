@@ -1,11 +1,11 @@
 
 type MessageInput = {
-  role: "user" | "assistant";
+  role: "user" | "assistant" | "system";
   content: string;
 };
 
 export class ChatService {
-  private static API_KEY_STORAGE_KEY = "openai_api_key";
+  private static API_KEY_STORAGE_KEY = "together_api_key";
 
   static saveApiKey(apiKey: string): void {
     localStorage.setItem(this.API_KEY_STORAGE_KEY, apiKey);
@@ -35,14 +35,14 @@ export class ChatService {
         { role: "user", content: message }
       ];
 
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetch("https://api.together.xyz/v1/chat/completions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: "gpt-4o-mini",
+          model: "meta-llama/Llama-3-8b-chat-hf",
           messages,
           max_tokens: 1000,
           temperature: 0.7,
@@ -51,7 +51,7 @@ export class ChatService {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error?.message || "Failed to get response from OpenAI");
+        throw new Error(errorData.error?.message || "Failed to get response from Together.ai");
       }
 
       const data = await response.json();
