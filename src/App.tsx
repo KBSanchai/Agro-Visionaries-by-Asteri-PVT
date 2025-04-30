@@ -11,6 +11,7 @@ import FieldMap from "./pages/FieldMap";
 import Navigation from "./pages/Navigation";
 import Settings from "./pages/Settings";
 import Chatbot from "./pages/Chatbot";
+import PlantDoctor from "./pages/PlantDoctor";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/navigation" element={<Navigation />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/chatbot" element={<Chatbot />} />
+          <Route path="/plant-doctor" element={<PlantDoctor />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
