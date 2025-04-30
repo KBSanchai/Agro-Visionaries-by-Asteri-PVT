@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { 
-  Plant, Upload, Leaf, AlertCircle, Check, Loader2, Camera 
+  Leaf, Upload, AlertCircle, Check, Loader2, Camera 
 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChatService } from "@/utils/ChatService";
@@ -140,7 +140,7 @@ const PlantDoctor = () => {
               <p className="text-xs text-gray-400 mt-1">Powered by Together.ai</p>
             </div>
             <div className="bg-green-100 p-2 rounded-full">
-              <Plant className="h-6 w-6 text-green-600" />
+              <Leaf className="h-6 w-6 text-green-600" />
             </div>
           </div>
         </header>
