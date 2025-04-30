@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -133,10 +132,10 @@ const WeatherSpiritPage: React.FC = () => {
 
   // Classes for background based on time of day
   const bgClasses = {
-    morning: "bg-gradient-to-b from-blue-200 to-blue-50",
-    day: "bg-gradient-to-b from-blue-400 to-blue-100",
-    evening: "bg-gradient-to-b from-orange-300 to-blue-200",
-    night: "bg-gradient-to-b from-blue-900 to-blue-700",
+    morning: "from-blue-200 to-blue-50",
+    day: "from-blue-400 to-blue-100",
+    evening: "from-orange-300 to-blue-200",
+    night: "from-blue-900 to-blue-700",
   };
 
   // Text color based on time of day
@@ -194,21 +193,9 @@ const WeatherSpiritPage: React.FC = () => {
   };
 
   return (
-    <Layout>
-      <div className={`min-h-screen ${bgClasses[timeOfDay]} transition-colors duration-1000`}>
-        <div className="max-w-md mx-auto px-4 py-6 relative">
-          {/* Animated elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="cloud absolute top-[10%] left-[5%] opacity-80 animate-float">
-              <Cloud className="text-white h-12 w-12" />
-            </div>
-            <div className="cloud absolute top-[5%] right-[15%] opacity-60 animate-float" style={{animationDelay: '2s'}}>
-              <Cloud className="text-white h-8 w-8" />
-            </div>
-            <div className="cloud absolute top-[20%] right-[5%] opacity-70 animate-float" style={{animationDelay: '4s'}}>
-              <Cloud className="text-white h-10 w-10" />
-            </div>
-          </div>
+    <Layout backgroundType="weather-spirit">
+      <div className="min-h-screen transition-colors duration-1000">
+        <div className="max-w-md mx-auto px-4 py-6 relative z-20">
           
           {/* Header */}
           <header className="mb-6 relative z-10">
