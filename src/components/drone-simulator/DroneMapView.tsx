@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Compass, ArrowUp, Laptop } from "lucide-react";
+import { Compass, ArrowUp, Laptop, Plant } from "lucide-react";
 import { DronePosition } from "@/types/drone";
 
 interface DroneMapViewProps {
@@ -11,6 +11,9 @@ interface DroneMapViewProps {
   handleTouchStart: (e: React.TouchEvent) => void;
   handleTouchMove: (e: React.TouchEvent) => void;
   handleTouchEnd: () => void;
+  score: number;
+  fieldType: string;
+  mission: string;
 }
 
 export const DroneMapView: React.FC<DroneMapViewProps> = ({
@@ -21,6 +24,9 @@ export const DroneMapView: React.FC<DroneMapViewProps> = ({
   handleTouchStart,
   handleTouchMove,
   handleTouchEnd,
+  score,
+  fieldType,
+  mission
 }) => {
   return (
     <div 
@@ -39,13 +45,30 @@ export const DroneMapView: React.FC<DroneMapViewProps> = ({
       {/* Field elements */}
       <div className="absolute top-[20%] left-[10%] w-[30%] h-[40%] bg-green-300/20 rounded-sm border border-green-300/30">
         <div className="absolute inset-0 flex items-center justify-center text-xs text-white/50">Rice Field</div>
+        {/* Plant icons */}
+        <Plant className="absolute text-green-300/70 w-4 h-4" style={{ top: '20%', left: '30%' }} />
+        <Plant className="absolute text-green-300/70 w-4 h-4" style={{ top: '60%', left: '50%' }} />
+        <Plant className="absolute text-green-300/70 w-4 h-4" style={{ top: '40%', left: '70%' }} />
       </div>
+      
       <div className="absolute top-[30%] left-[50%] w-[40%] h-[30%] bg-green-400/20 rounded-sm border border-green-400/30">
         <div className="absolute inset-0 flex items-center justify-center text-xs text-white/50">Wheat Crops</div>
+        {/* Plant icons */}
+        <Plant className="absolute text-green-400/70 w-4 h-4" style={{ top: '20%', left: '20%' }} />
+        <Plant className="absolute text-green-400/70 w-4 h-4" style={{ top: '50%', left: '40%' }} />
+        <Plant className="absolute text-green-400/70 w-4 h-4" style={{ top: '30%', left: '70%' }} />
+        <Plant className="absolute text-green-400/70 w-4 h-4" style={{ top: '70%', left: '60%' }} />
       </div>
+      
       <div className="absolute top-[70%] left-[20%] w-[60%] h-[20%] bg-green-200/20 rounded-sm border border-green-200/30">
         <div className="absolute inset-0 flex items-center justify-center text-xs text-white/50">Orchard</div>
+        {/* Plant icons */}
+        <Plant className="absolute text-green-200/70 w-4 h-4" style={{ top: '30%', left: '15%' }} />
+        <Plant className="absolute text-green-200/70 w-4 h-4" style={{ top: '50%', left: '35%' }} />
+        <Plant className="absolute text-green-200/70 w-4 h-4" style={{ top: '40%', left: '55%' }} />
+        <Plant className="absolute text-green-200/70 w-4 h-4" style={{ top: '60%', left: '75%' }} />
       </div>
+      
       <div className="absolute top-[10%] left-[80%] w-[15%] h-[15%] bg-blue-400/30 rounded-sm border border-blue-400/50">
         <div className="absolute inset-0 flex items-center justify-center text-xs text-white/50">Reservoir</div>
       </div>
@@ -102,14 +125,14 @@ export const DroneMapView: React.FC<DroneMapViewProps> = ({
         Position: {dronePosition.x.toFixed(1)}, {dronePosition.y.toFixed(1)}
       </div>
 
-      {/* Mission objective indicator (placeholder) */}
+      {/* Mission objective indicator */}
       <div className="absolute top-2 left-2 bg-black/50 backdrop-blur-sm text-white text-xs p-2 rounded">
-        Mission: Explore the farm
+        Mission: {mission}
       </div>
 
-      {/* Score (placeholder) */}
+      {/* Score */}
       <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-xs p-2 rounded">
-        Score: 0
+        Score: {score}
       </div>
     </div>
   );

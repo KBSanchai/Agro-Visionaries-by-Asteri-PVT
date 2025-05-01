@@ -3,12 +3,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/Layout";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Camera, Map } from "lucide-react";
+import { Camera, Map, Laptop } from "lucide-react";
 import { toast } from "sonner";
 import { DroneControls } from "@/components/drone-simulator/DroneControls";
 import { DroneMapView } from "@/components/drone-simulator/DroneMapView";
 import { DroneCameraView } from "@/components/drone-simulator/DroneCameraView";
 import { DroneSimulatorTips } from "@/components/drone-simulator/DroneSimulatorTips";
+import { DroneMissionData } from "@/components/drone-simulator/DroneMissionData";
+import { DroneHelpDialog } from "@/components/drone-simulator/DroneHelpDialog";
 import { DronePosition, DroneGameState } from "@/types/drone";
 
 const DroneSimulator: React.FC = () => {
@@ -31,11 +33,13 @@ const DroneSimulator: React.FC = () => {
   const [isDroneOn, setIsDroneOn] = useState(false);
   const [speed, setSpeed] = useState(5);
   const [activeView, setActiveView] = useState<"map" | "camera">("map");
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const simulationRef = useRef<HTMLDivElement>(null);
   const [fieldSize, setFieldSize] = useState({ width: 800, height: 600 });
   const [dragging, setDragging] = useState(false);
   const [lastTouchPosition, setLastTouchPosition] = useState({ x: 0, y: 0 });
   const batteryInterval = useRef<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Initialize field size based on container dimensions
   useEffect(() => {
@@ -44,6 +48,58 @@ const DroneSimulator: React.FC = () => {
       setFieldSize({ width, height });
     }
   }, []);
+  
+  // Detect when drone is over different field types
+  useEffect(() => {
+    if (!isDroneOn) return;
+    
+    let newFieldType: DroneGameState["fieldType"] = "none";
+    
+    // Check Rice Field
+    if (
+      dronePosition.x >= 10 && 
+      dronePosition.x <= 40 && 
+      dronePosition.y >= 20 && 
+      dronePosition.y <= 60
+    ) {
+      newFieldType = "rice";
+    }
+    // Check Wheat Crops
+    else if (
+      dronePosition.x >= 50 && 
+      dronePosition.x <= 90 && 
+      dronePosition.y >= 30 && 
+      dronePosition.y <= 60
+    ) {
+      newFieldType = "wheat";
+    }
+    // Check Orchard
+    else if (
+      dronePosition.x >= 20 && 
+      dronePosition.x <= 80 && 
+      dronePosition.y >= 70 && 
+      dronePosition.y <= 90
+    ) {
+      newFieldType = "orchard";
+    }
+    // Check Reservoir
+    else if (
+      dronePosition.x >= 80 && 
+      dronePosition.x <= 95 && 
+      dronePosition.y >= 10 && 
+      dronePosition.y <= 25
+    ) {
+      newFieldType = "reservoir";
+    }
+    
+    if (newFieldType !== gameState.fieldType) {
+      setGameState(prev => ({ ...prev, fieldType: newFieldType }));
+      
+      if (newFieldType !== "none") {
+        toast.info(`Entered ${newFieldType} area`);
+      }
+    }
+  }, [dronePosition, isDroneOn, gameState.fieldType]);
 
   // Battery management
   useEffect(() => {
@@ -93,6 +149,33 @@ const DroneSimulator: React.FC = () => {
       }
     };
   }, [isDroneOn, gameState.isCharging]);
+
+  // Toggle fullscreen mode
+  const toggleFullscreen = () => {
+    if (!containerRef.current) return;
+    
+    if (!isFullscreen) {
+      if (containerRef.current.requestFullscreen) {
+        containerRef.current.requestFullscreen();
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
+  
+  // Listen for fullscreen change
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+    
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+    };
+  }, []);
 
   // Power on/off the drone
   const toggleDronePower = () => {
@@ -264,6 +347,15 @@ const DroneSimulator: React.FC = () => {
     
     toast.success("Drone photo captured!");
     
+    // Add points if in a field area
+    if (gameState.fieldType !== "none") {
+      setGameState(prev => ({
+        ...prev,
+        score: prev.score + 10
+      }));
+      toast.success(`+10 points for ${gameState.fieldType} field photo!`);
+    }
+    
     // Consume some battery for taking a photo
     setGameState(prev => ({
       ...prev,
@@ -294,12 +386,23 @@ const DroneSimulator: React.FC = () => {
 
   return (
     <Layout backgroundType="drone-simulator">
-      <div className="min-h-screen p-4">
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-screen p-4" ref={containerRef}>
+        <div className={`max-w-4xl mx-auto ${isFullscreen ? 'max-w-none' : ''}`}>
           {/* Header */}
-          <div className="mb-4 relative z-10">
-            <h1 className="text-2xl font-bold text-white">Virtual Drone Simulator</h1>
-            <p className="text-white/70">Control your drone over virtual agricultural fields</p>
+          <div className={`mb-4 relative z-10 flex items-center justify-between ${isFullscreen ? 'p-2 bg-black/30 backdrop-blur-sm rounded-lg' : ''}`}>
+            <div>
+              <h1 className="text-2xl font-bold text-white">Virtual Drone Simulator</h1>
+              <p className="text-white/70">Control your drone over virtual agricultural fields</p>
+            </div>
+            <div className="flex gap-2">
+              <button 
+                onClick={toggleFullscreen}
+                className="h-8 px-3 py-1 text-xs rounded bg-white/10 text-white hover:bg-white/20 transition-colors"
+              >
+                {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen Mode'}
+              </button>
+              <DroneHelpDialog />
+            </div>
           </div>
 
           {/* Main Simulator Area */}
@@ -343,12 +446,30 @@ const DroneSimulator: React.FC = () => {
                       handleTouchStart={handleTouchStart}
                       handleTouchMove={handleTouchMove}
                       handleTouchEnd={handleTouchEnd}
+                      score={gameState.score}
+                      fieldType={gameState.fieldType}
+                      mission={gameState.mission}
                     />
                   </div>
                 </TabsContent>
                 
                 <TabsContent value="camera" className="m-0">
                   <DroneCameraView dronePosition={dronePosition} />
+                </TabsContent>
+              </Tabs>
+              
+              {/* Mission Data Tab */}
+              <Tabs defaultValue="mission" className="w-full mt-2 px-2 pb-2">
+                <TabsList className="bg-black/30 w-full">
+                  <TabsTrigger value="mission" className="flex-1 data-[state=active]:bg-green-500/20">
+                    Mission Data
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="mission" className="mt-2">
+                  <DroneMissionData 
+                    dronePosition={dronePosition} 
+                    gameState={gameState} 
+                  />
                 </TabsContent>
               </Tabs>
             </Card>
@@ -368,10 +489,12 @@ const DroneSimulator: React.FC = () => {
             />
           </div>
 
-          {/* Tips */}
-          <div className="mt-4">
-            <DroneSimulatorTips />
-          </div>
+          {/* Tips (hidden in fullscreen mode) */}
+          {!isFullscreen && (
+            <div className="mt-4">
+              <DroneSimulatorTips />
+            </div>
+          )}
         </div>
       </div>
     </Layout>
