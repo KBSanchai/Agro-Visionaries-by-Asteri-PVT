@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Card } from "@/components/ui/card";
-import { Plant, MapPin } from "lucide-react";
+import { Leaf, MapPin } from "lucide-react";
 import { DronePosition, DroneGameState } from "@/types/drone";
 
 interface DroneMissionDataProps {
@@ -37,7 +37,7 @@ export const DroneMissionData: React.FC<DroneMissionDataProps> = ({
         
         <div className="space-y-2">
           <h3 className="text-sm font-semibold text-white flex items-center gap-1">
-            <Plant className="h-4 w-4" /> Mission Data
+            <Leaf className="h-4 w-4" /> Mission Data
           </h3>
           <div className="grid grid-cols-2 gap-1 text-xs">
             <div className="text-white/70">Current Score:</div>

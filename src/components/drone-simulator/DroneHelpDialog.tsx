@@ -2,7 +2,7 @@
 import React from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, Plant } from "lucide-react";
+import { HelpCircle, Leaf } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const DroneHelpDialog: React.FC = () => {
@@ -84,7 +84,7 @@ export const DroneHelpDialog: React.FC = () => {
             <ul className="list-disc pl-5 text-sm text-white/80 space-y-2">
               <li>Keep your drone battery above 20% to avoid emergency landing</li>
               <li>Use the Map View for navigation and Camera View for detailed inspections</li>
-              <li>Plant icons on the map indicate areas of interest that need monitoring</li>
+              <li>Leaf icons on the map indicate areas of interest that need monitoring</li>
               <li>Higher altitude gives better overview but less detail in photos</li>
               <li>The charging station is located in the bottom right corner</li>
               <li>Take multiple photos of the same area to increase accuracy of analysis</li>
