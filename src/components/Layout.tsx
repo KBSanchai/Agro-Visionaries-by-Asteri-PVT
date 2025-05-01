@@ -17,6 +17,7 @@ export const Layout: React.FC<LayoutProps> = ({
 }) => {
   const location = useLocation();
   const [mounted, setMounted] = useState(false);
+  const [hovering, setHovering] = useState(false);
   const isHomePage = location.pathname === "/";
 
   // Add a small delay for page transition
@@ -29,8 +30,14 @@ export const Layout: React.FC<LayoutProps> = ({
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-hidden relative">
-      <MotionBackground type={backgroundType || location.pathname.substring(1)} />
+    <div 
+      className="min-h-screen flex flex-col bg-background overflow-hidden relative"
+      onMouseMove={() => !hovering && setHovering(true)}
+    >
+      <MotionBackground 
+        type={backgroundType || location.pathname.substring(1)} 
+        isInteractive={hovering}
+      />
       
       <main 
         className={`flex-1 pb-16 overflow-auto relative z-10 ${
@@ -38,6 +45,7 @@ export const Layout: React.FC<LayoutProps> = ({
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-4'
         } transition-all duration-500 ease-out`}
+        onClick={() => setHovering(false)}
       >
         {children}
       </main>

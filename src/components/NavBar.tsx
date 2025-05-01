@@ -1,45 +1,68 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, MapPin, Leaf, MessageCircle, CloudSun } from "lucide-react";
 
 export const NavBar: React.FC = () => {
   const location = useLocation();
   const isActive = (path: string) => location.pathname === path;
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-white/5 backdrop-blur-lg border-t border-white/10 py-1 px-3 z-10">
-      <div className="flex items-center justify-between max-w-md mx-auto">
+      <div className="flex items-center justify-between max-w-md mx-auto relative">
+        <div className="absolute bottom-full left-0 right-0 h-8 bg-gradient-to-t from-background/80 to-transparent pointer-events-none"></div>
+        
         <NavItem 
           to="/" 
-          icon={<Home className="w-4 h-4" />} 
+          icon={<Home className={`w-4 h-4 transition-all duration-300 ${hoveredItem === "/" ? "scale-110" : ""}`} />} 
           isActive={isActive("/")} 
           label="Home" 
+          onHover={() => setHoveredItem("/")}
+          onLeave={() => setHoveredItem(null)}
         />
         <NavItem 
           to="/navigation" 
-          icon={<MapPin className="w-4 h-4" />} 
+          icon={<MapPin className={`w-4 h-4 transition-all duration-300 ${hoveredItem === "/navigation" ? "scale-110" : ""}`} />} 
           isActive={isActive("/navigation")} 
           label="Map" 
+          onHover={() => setHoveredItem("/navigation")}
+          onLeave={() => setHoveredItem(null)}
         />
         <NavItem 
           to="/health" 
-          icon={<Leaf className="w-4 h-4" />} 
+          icon={<Leaf className={`w-4 h-4 transition-all duration-300 ${hoveredItem === "/health" ? "scale-110" : ""}`} />} 
           isActive={isActive("/health")} 
           label="Health" 
+          onHover={() => setHoveredItem("/health")}
+          onLeave={() => setHoveredItem(null)}
         />
         <NavItem 
           to="/weather-spirit" 
-          icon={<CloudSun className="w-4 h-4" />} 
+          icon={<CloudSun className={`w-4 h-4 transition-all duration-300 ${hoveredItem === "/weather-spirit" ? "scale-110" : ""}`} />} 
           isActive={isActive("/weather-spirit")} 
-          label="Weather" 
+          label="Weather"
+          onHover={() => setHoveredItem("/weather-spirit")}
+          onLeave={() => setHoveredItem(null)} 
         />
         <NavItem 
           to="/chatbot" 
-          icon={<MessageCircle className="w-4 h-4" />} 
+          icon={<MessageCircle className={`w-4 h-4 transition-all duration-300 ${hoveredItem === "/chatbot" ? "scale-110" : ""}`} />} 
           isActive={isActive("/chatbot")} 
           label="Assistant" 
+          onHover={() => setHoveredItem("/chatbot")}
+          onLeave={() => setHoveredItem(null)}
         />
+        
+        {hoveredItem && (
+          <div 
+            className="absolute -top-6 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-400/30 to-transparent animate-pulse-soft"
+            style={{
+              transition: "opacity 0.3s ease-out",
+              opacity: hoveredItem ? 1 : 0
+            }}
+          ></div>
+        )}
       </div>
     </div>
   );
@@ -50,9 +73,11 @@ interface NavItemProps {
   icon: React.ReactNode;
   isActive: boolean;
   label: string;
+  onHover: () => void;
+  onLeave: () => void;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ to, icon, isActive, label }) => (
+const NavItem: React.FC<NavItemProps> = ({ to, icon, isActive, label, onHover, onLeave }) => (
   <Link
     to={to}
     className={`flex flex-col items-center px-1.5 py-1 rounded-lg transition-all duration-300 ${
@@ -60,14 +85,16 @@ const NavItem: React.FC<NavItemProps> = ({ to, icon, isActive, label }) => (
       ? "bg-gradient-to-r from-blue-500/40 to-purple-500/40 text-white" 
       : "text-gray-300 hover:text-white"
     }`}
+    onMouseEnter={onHover}
+    onMouseLeave={onLeave}
   >
-    <div className={`rounded-full p-1 ${
+    <div className={`rounded-full p-1 transition-all duration-300 ${
       isActive 
         ? "bg-gradient-to-r from-blue-400 via-blue-500 to-purple-500 shadow-lg shadow-blue-400/20" 
-        : "bg-transparent"
+        : "bg-transparent hover:bg-white/10"
     }`}>
       {icon}
     </div>
-    <span className="text-[9px] mt-0.5 font-medium">{label}</span>
+    <span className="text-[9px] mt-0.5 font-medium transition-all">{label}</span>
   </Link>
 );
