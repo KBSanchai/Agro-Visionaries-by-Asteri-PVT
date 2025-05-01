@@ -45,7 +45,6 @@ export const Layout: React.FC<LayoutProps> = ({
             ? 'opacity-100 translate-y-0' 
             : 'opacity-0 translate-y-4'
         } transition-all duration-500 ease-out`}
-        onClick={() => setHovering(false)}
       >
         {children}
       </main>

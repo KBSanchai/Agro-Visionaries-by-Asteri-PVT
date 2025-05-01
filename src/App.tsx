@@ -13,6 +13,7 @@ import Settings from "./pages/Settings";
 import Chatbot from "./pages/Chatbot";
 import PlantDoctor from "./pages/PlantDoctor";
 import WeatherSpirit from "./pages/WeatherSpirit";
+import DroneSimulator from "./pages/DroneSimulator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/plant-doctor" element={<PlantDoctor />} />
           <Route path="/weather-spirit" element={<WeatherSpirit />} />
+          <Route path="/drone-simulator" element={<DroneSimulator />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

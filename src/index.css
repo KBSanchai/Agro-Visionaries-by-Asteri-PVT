@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -192,6 +193,15 @@
   }
 }
 
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .animate-soft-float {
   animation: soft-float 6s ease-in-out infinite;
 }
@@ -202,6 +212,10 @@
 
 .animate-breathe {
   animation: breathe 4s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
 }
 
 /* Button and interactive element effects */
@@ -248,6 +262,10 @@
 
 .bg-home {
   background: linear-gradient(to bottom, #2980B9, #6DD5FA, #FFFFFF);
+}
+
+.bg-drone-simulator {
+  background: linear-gradient(to bottom, #304352, #485563, #2b5876);
 }
 
 /* Weather Spirit Motion Elements */
@@ -314,6 +332,17 @@
   animation: fall-drops 20s linear infinite;
 }
 
+.health-plants {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="rgba(52,131,45,0.15)" d="M10,100 C20,80 15,70 20,60 C25,70 30,80 40,100 M30,100 C40,70 50,60 45,50 C50,60 60,70 70,100 M60,100 C70,80 65,70 70,60 C75,70 80,80 90,100" stroke="rgba(52,131,45,0.2)" stroke-width="1"/></svg>');
+  background-repeat: repeat-x;
+  background-size: 150px 150px;
+}
+
 /* Navigation Page Elements */
 .nav-map-grid {
   position: absolute;
@@ -339,6 +368,15 @@
   animation: pulse-markers 5s ease-in-out infinite;
 }
 
+.nav-drones {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 2L12 7"/><path d="M12 17L12 22"/><path d="M2 12L7 12"/><path d="M17 12L22 12"/></svg>');
+  background-size: 120px 120px;
+  animation: move-drones 40s linear infinite;
+}
+
 /* Chatbot Elements */
 .chat-bubbles {
   position: absolute;
@@ -353,6 +391,57 @@
   animation: float-bubbles 20s ease-in-out infinite;
 }
 
+.chat-waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="rgba(255,255,255,0.2)"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="rgba(255,255,255,0.15)"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="rgba(255,255,255,0.1)"/></svg>');
+  background-size: 100% 100%;
+  animation: wave-motion 15s ease-in-out infinite alternate;
+}
+
+/* Drone Simulator Elements */
+.drone-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(20, 220, 100, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 220, 100, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: pulse-grid 8s ease-in-out infinite;
+}
+
+.drone-particles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, rgba(0, 255, 150, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: drift-particles 15s linear infinite;
+}
+
+.drone-path {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,50 Q30,20 50,50 T90,50" stroke="rgba(0, 255, 150, 0.2)" stroke-width="1.5" fill="none" stroke-dasharray="4" /></svg>');
+  background-size: 200px 200px;
+  animation: move-path 30s linear infinite;
+}
+
+.drone-fields {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><rect x="0" y="80" width="20" height="20" fill="rgba(20, 100, 20, 0.1)" /><rect x="20" y="80" width="20" height="20" fill="rgba(30, 110, 30, 0.1)" /><rect x="40" y="80" width="20" height="20" fill="rgba(20, 100, 20, 0.1)" /><rect x="60" y="80" width="20" height="20" fill="rgba(30, 110, 30, 0.1)" /><rect x="80" y="80" width="20" height="20" fill="rgba(20, 100, 20, 0.1)" /><rect x="0" y="60" width="20" height="20" fill="rgba(30, 110, 30, 0.1)" /><rect x="20" y="60" width="20" height="20" fill="rgba(20, 100, 20, 0.1)" /><rect x="40" y="60" width="20" height="20" fill="rgba(30, 110, 30, 0.1)" /><rect x="60" y="60" width="20" height="20" fill="rgba(20, 100, 20, 0.1)" /><rect x="80" y="60" width="20" height="20" fill="rgba(30, 110, 30, 0.1)" /></svg>');
+  background-size: 100px 100px;
+  opacity: 0.5;
+}
+
 /* Home Page Elements */
 .home-particles {
   position: absolute;
@@ -363,6 +452,18 @@
     radial-gradient(circle at 50px 50px, rgba(255,255,255,0.2) 1px, transparent 1px);
   background-size: 30px 30px;
   animation: float-particles 20s linear infinite;
+}
+
+.home-farming-elements {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30"><path d="M10,30 C15,15 20,18 25,10 C30,18 35,15 40,30" stroke="rgba(52,131,45,0.2)" stroke-width="0.5" fill="none" /><path d="M30,30 C35,15 40,18 45,10 C50,18 55,15 60,30" stroke="rgba(52,131,45,0.2)" stroke-width="0.5" fill="none" /><path d="M50,30 C55,15 60,18 65,10 C70,18 75,15 80,30" stroke="rgba(52,131,45,0.2)" stroke-width="0.5" fill="none" /><path d="M70,30 C75,15 80,18 85,10 C90,18 95,15 100,30" stroke="rgba(52,131,45,0.2)" stroke-width="0.5" fill="none" /></svg>');
+  background-size: 100px 30px;
+  background-repeat: repeat-x;
+  animation: sway-plants 15s ease-in-out infinite;
 }
 
 /* Animations */
@@ -477,4 +578,57 @@
   100% {
     background-position: 300px 300px;
   }
+}
+
+@keyframes wave-motion {
+  0% {
+    transform: translateY(0) scaleY(1);
+  }
+  50% {
+    transform: translateY(-5px) scaleY(1.05);
+  }
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+@keyframes drift-particles {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 100px 100px;
+  }
+}
+
+@keyframes move-path {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+@keyframes move-drones {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 400px 400px;
+  }
+}
+
+@keyframes sway-plants {
+  0%, 100% {
+    transform: skewX(-2deg);
+  }
+  50% {
+    transform: skewX(2deg);
+  }
+}
+
+/* Add utility classes for radial gradients */
+.bg-gradient-radial {
+  background: radial-gradient(var(--tw-gradient-stops));
 }
