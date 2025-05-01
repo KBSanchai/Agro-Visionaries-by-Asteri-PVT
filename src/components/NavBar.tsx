@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, MapPin, Leaf, MessageCircle, CloudSun, Drone } from "lucide-react";
+import { Home, MapPin, Leaf, MessageCircle, CloudSun, Laptop } from "lucide-react";
 
 export const NavBar: React.FC = () => {
   const location = useLocation();
@@ -60,7 +60,7 @@ export const NavBar: React.FC = () => {
         />
         <NavItem 
           to="/drone-simulator" 
-          icon={<Drone className={`w-4 h-4 transition-all duration-300 ${hoveredItem === "/drone-simulator" ? "scale-125" : ""}`} />} 
+          icon={<Laptop className={`w-4 h-4 transition-all duration-300 ${hoveredItem === "/drone-simulator" ? "scale-125" : ""}`} />} 
           isActive={isActive("/drone-simulator")} 
           label="Drone" 
           onHover={() => setHoveredItem("/drone-simulator")}

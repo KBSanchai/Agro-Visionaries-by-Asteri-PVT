@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/Layout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Compass, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Drone, Camera, Maximize, Minimize, Video, Map } from "lucide-react";
+import { Compass, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, Laptop, Camera, Maximize, Minimize, Video, Map } from "lucide-react";
 import { toast } from "sonner";
 
 // Drone position type
@@ -219,7 +218,7 @@ const DroneSimulator: React.FC = () => {
                           filter: `drop-shadow(0 0 ${dronePosition.altitude / 10}px rgba(255,255,255,0.8))`
                         }}
                       >
-                        <Drone className="text-white w-full h-full animate-pulse" />
+                        <Laptop className="text-white w-full h-full animate-pulse" />
                         
                         {/* Drone shadow based on altitude */}
                         <div 
@@ -341,7 +340,7 @@ const DroneSimulator: React.FC = () => {
                       <ArrowLeft className="h-4 w-4" />
                     </Button>
                     <div className="flex items-center justify-center">
-                      <Drone className="h-5 w-5 text-white/70" />
+                      <Laptop className="h-5 w-5 text-white/70" />
                     </div>
                     <Button 
                       variant="outline" 
