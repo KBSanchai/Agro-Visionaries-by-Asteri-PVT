@@ -26,17 +26,17 @@ export const MotionBackground: React.FC<MotionBackgroundProps> = ({ type, isInte
   const getBackgroundClass = () => {
     switch (type) {
       case "weather-spirit":
-        return "bg-weather";
+        return "bg-weather-fluid";
       case "health":
-        return "bg-health";
+        return "bg-health-fluid";
       case "navigation":
-        return "bg-navigation";
+        return "bg-navigation-fluid";
       case "chatbot":
-        return "bg-chatbot";
+        return "bg-chatbot-fluid";
       case "drone-simulator":
-        return "bg-drone-simulator";
+        return "bg-drone-simulator-fluid";
       default:
-        return "bg-home";
+        return "bg-home-fluid";
     }
   };
 
@@ -50,18 +50,55 @@ export const MotionBackground: React.FC<MotionBackgroundProps> = ({ type, isInte
       transition: "transform 0.6s ease-out" 
     } : {};
     
+    // Common fluid elements that appear across all pages
+    const commonFluidElements = (
+      <>
+        {/* Flowing pipes */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="fluid-pipe horizontal" style={{top: '20%', height: '2px'}}></div>
+          <div className="fluid-pipe horizontal" style={{top: '40%', height: '2px'}}></div>
+          <div className="fluid-pipe horizontal" style={{top: '60%', height: '2px'}}></div>
+          <div className="fluid-pipe horizontal" style={{top: '80%', height: '2px'}}></div>
+          
+          <div className="fluid-pipe vertical" style={{left: '25%', width: '2px'}}></div>
+          <div className="fluid-pipe vertical" style={{left: '50%', width: '2px'}}></div>
+          <div className="fluid-pipe vertical" style={{left: '75%', width: '2px'}}></div>
+        </div>
+        
+        {/* Fluid bubbles */}
+        <div className="fluid-bubbles"></div>
+        
+        {/* Glowing nodes */}
+        <div className="node-glow" style={{top: '20%', left: '25%'}}></div>
+        <div className="node-glow" style={{top: '20%', left: '50%'}}></div>
+        <div className="node-glow" style={{top: '20%', left: '75%'}}></div>
+        
+        <div className="node-glow" style={{top: '40%', left: '25%'}}></div>
+        <div className="node-glow" style={{top: '40%', left: '75%'}}></div>
+        
+        <div className="node-glow" style={{top: '60%', left: '25%'}}></div>
+        <div className="node-glow" style={{top: '60%', left: '50%'}}></div>
+        <div className="node-glow" style={{top: '60%', left: '75%'}}></div>
+        
+        <div className="node-glow" style={{top: '80%', left: '25%'}}></div>
+        <div className="node-glow" style={{top: '80%', left: '50%'}}></div>
+        <div className="node-glow" style={{top: '80%', left: '75%'}}></div>
+      </>
+    );
+    
     switch (type) {
       case "weather-spirit":
         return (
           <>
-            <div className="weather-clouds" style={style}></div>
-            <div className="weather-rain" 
+            {commonFluidElements}
+            <div className="weather-fluid-clouds" style={style}></div>
+            <div className="weather-fluid-rain" 
               style={{...style, transform: `translate(${offsetX * 1.5}px, ${offsetY * 0.5}px)`}}
             ></div>
-            <div className="weather-sun" 
+            <div className="weather-fluid-sun" 
               style={{...style, transform: `translate(${offsetX * -0.2}px, ${offsetY * -0.2}px)`}}
             ></div>
-            <div className="farming-crops" 
+            <div className="farming-fluid-crops" 
               style={{...style, transform: `translate(${offsetX * 0.3}px, ${offsetY * 0.1}px) skewX(${offsetX * 0.2}deg)`}}
             ></div>
           </>
@@ -69,13 +106,14 @@ export const MotionBackground: React.FC<MotionBackgroundProps> = ({ type, isInte
       case "health":
         return (
           <>
-            <div className="health-leaves" 
+            {commonFluidElements}
+            <div className="health-fluid-leaves" 
               style={{...style, transform: `translate(${offsetX * 0.8}px, ${offsetY * 0.8}px) rotate(${offsetX * 2}deg)`}}
             ></div>
-            <div className="health-drops" 
+            <div className="health-fluid-drops" 
               style={{...style, transform: `translate(${offsetX * 1.2}px, ${offsetY * 1.2}px)`}}
             ></div>
-            <div className="health-plants" 
+            <div className="health-fluid-plants" 
               style={{...style, transform: `translate(${offsetX * 0.5}px, ${offsetY * 0.5}px) scale(${1 + mousePosition.y * 0.1})`}}
             ></div>
           </>
@@ -83,13 +121,14 @@ export const MotionBackground: React.FC<MotionBackgroundProps> = ({ type, isInte
       case "navigation":
         return (
           <>
-            <div className="nav-map-grid" 
+            {commonFluidElements}
+            <div className="nav-fluid-grid" 
               style={{...style, transform: `translate(${offsetX * 0.1}px, ${offsetY * 0.1}px) scale(${1 + mousePosition.y * 0.05})`}}
             ></div>
-            <div className="nav-markers" 
+            <div className="nav-fluid-markers" 
               style={{...style, transform: `translate(${offsetX * 0.8}px, ${offsetY * 0.8}px)`}}
             ></div>
-            <div className="nav-drones" 
+            <div className="nav-fluid-drones" 
               style={{...style, transform: `translate(${offsetX * -0.5}px, ${offsetY * -0.5}px) rotate(${offsetX * 5}deg)`}}
             ></div>
           </>
@@ -97,10 +136,11 @@ export const MotionBackground: React.FC<MotionBackgroundProps> = ({ type, isInte
       case "chatbot":
         return (
           <>
-            <div className="chat-bubbles" 
+            {commonFluidElements}
+            <div className="chat-fluid-bubbles" 
               style={{...style, transform: `translate(${offsetX * 0.6}px, ${offsetY * 0.6}px)`}}
             ></div>
-            <div className="chat-waves" 
+            <div className="chat-fluid-waves" 
               style={{...style, transform: `translate(${offsetX * -0.3}px, ${offsetY * -0.3}px) scale(${1 + mousePosition.x * 0.05})`}}
             ></div>
           </>
@@ -108,16 +148,17 @@ export const MotionBackground: React.FC<MotionBackgroundProps> = ({ type, isInte
       case "drone-simulator":
         return (
           <>
-            <div className="drone-grid" 
+            {commonFluidElements}
+            <div className="drone-fluid-grid" 
               style={{...style, transform: `translate(${offsetX * 0.1}px, ${offsetY * 0.1}px)`}}
             ></div>
-            <div className="drone-particles" 
+            <div className="drone-fluid-particles" 
               style={{...style, transform: `translate(${offsetX * 0.7}px, ${offsetY * 0.7}px)`}}
             ></div>
-            <div className="drone-path" 
+            <div className="drone-fluid-path" 
               style={{...style, transform: `translate(${offsetX * -0.3}px, ${offsetY * -0.3}px) rotate(${offsetX * 1}deg)`}}
             ></div>
-            <div className="drone-fields" 
+            <div className="drone-fluid-fields" 
               style={{...style, transform: `skewX(${offsetX * 0.2}deg) skewY(${offsetY * 0.2}deg)`}}
             ></div>
           </>
@@ -125,22 +166,23 @@ export const MotionBackground: React.FC<MotionBackgroundProps> = ({ type, isInte
       default:
         return (
           <>
-            <div className="home-particles" 
+            {commonFluidElements}
+            <div className="home-fluid-particles" 
               style={{...style, transform: `translate(${offsetX * 0.5}px, ${offsetY * 0.5}px)`}}
             ></div>
-            <div className="home-interactive-element" 
+            <div className="home-fluid-interactive-element" 
               style={{
                 position: "absolute", 
                 top: "30%", 
                 left: "20%", 
                 width: "60%", 
                 height: "40%", 
-                background: `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, rgba(255,255,255,0.3) 0%, transparent 70%)`,
+                background: `radial-gradient(circle at ${mousePosition.x * 100}% ${mousePosition.y * 100}%, rgba(0,255,255,0.3) 0%, transparent 70%)`,
                 transition: "background 0.8s ease-out",
                 pointerEvents: "none"
               }}
             ></div>
-            <div className="home-farming-elements" 
+            <div className="home-fluid-elements" 
               style={{...style, transform: `translate(${offsetX * 0.2}px, ${offsetY * 0.2}px) rotate(${offsetX}deg)`}}
             ></div>
           </>
@@ -153,7 +195,7 @@ export const MotionBackground: React.FC<MotionBackgroundProps> = ({ type, isInte
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-background/70 z-0"></div>
       {getMotionElements()}
       {isInteractive && (
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse-soft pointer-events-none"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-500/5 to-transparent animate-pulse-soft pointer-events-none"></div>
       )}
     </div>
   );

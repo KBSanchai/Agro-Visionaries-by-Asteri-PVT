@@ -43,6 +43,12 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Fluid theme colors */
+    --fluid-blue: 199 89% 48%;
+    --fluid-cyan: 189 94% 43%;
+    --fluid-teal: 173 80% 40%;
+    --fluid-glow: 186 100% 69%;
   }
 
   .dark {
@@ -81,6 +87,12 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    /* Fluid theme colors - darker variants */
+    --fluid-blue: 199 89% 38%;
+    --fluid-cyan: 189 94% 33%;
+    --fluid-teal: 173 80% 30%;
+    --fluid-glow: 186 100% 59%;
   }
 }
 
@@ -95,8 +107,21 @@
   }
 }
 
+/* Fluid UI Components */
 .glass-card {
   @apply bg-white bg-opacity-80 backdrop-blur-md border border-white border-opacity-20 shadow-sm;
+}
+
+.fluid-card {
+  @apply bg-gradient-to-br from-blue-500/10 to-cyan-500/5 backdrop-blur-lg border border-blue-300/20 rounded-xl shadow-lg shadow-blue-500/10 transition-all duration-300;
+}
+
+.fluid-card:hover {
+  @apply shadow-blue-400/20 border-blue-300/30 -translate-y-1;
+}
+
+.fluid-button {
+  @apply bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-lg px-4 py-2 shadow-md shadow-blue-500/20 hover:shadow-blue-500/40 transition-all duration-300 hover:-translate-y-1;
 }
 
 .fade-mask-b {
@@ -148,12 +173,12 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 210, 255, 0.3);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(0, 210, 255, 0.5);
 }
 
 /* Glassmorphism utilities */
@@ -163,6 +188,12 @@
 
 .glassmorphism-dark {
   @apply bg-black bg-opacity-30 backdrop-blur-md border border-white border-opacity-10;
+}
+
+/* Fluid glassmorphism */
+.fluid-glassmorphism {
+  @apply bg-gradient-to-br from-blue-500/10 to-cyan-500/5 backdrop-blur-lg border border-cyan-300/20;
+  box-shadow: 0 8px 32px rgba(0, 210, 255, 0.1);
 }
 
 /* New animations */
@@ -177,10 +208,39 @@
 
 @keyframes glow {
   0%, 100% {
-    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+    filter: drop-shadow(0 0 5px rgba(0, 210, 255, 0.7));
   }
   50% {
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9));
+    filter: drop-shadow(0 0 15px rgba(0, 210, 255, 0.9));
+  }
+}
+
+@keyframes flow-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes bubble-rise {
+  0% {
+    transform: translateY(100%) translateX(0px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.6;
+  }
+  70% {
+    opacity: 0.4;
+  }
+  100% {
+    transform: translateY(-1000%) translateX(20px);
+    opacity: 0;
   }
 }
 
@@ -202,6 +262,15 @@
   }
 }
 
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px 2px rgba(0, 210, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px 5px rgba(0, 210, 255, 0.6);
+  }
+}
+
 .animate-soft-float {
   animation: soft-float 6s ease-in-out infinite;
 }
@@ -218,14 +287,18 @@
   animation: spin-slow 20s linear infinite;
 }
 
+.animate-flow {
+  animation: flow-animation 8s ease infinite;
+}
+
 /* Button and interactive element effects */
 .btn-gradient {
-  @apply bg-gradient-to-r from-blue-400 to-purple-500 hover:from-blue-500 hover:to-purple-600 transition-all duration-300 text-white font-medium;
+  @apply bg-gradient-to-r from-blue-400 to-cyan-500 hover:from-blue-500 hover:to-cyan-600 transition-all duration-300 text-white font-medium;
 }
 
 .scrollbar-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  scrollbar-color: rgba(0, 210, 255, 0.2) transparent;
 }
 
 /* Card hover effects */
@@ -243,33 +316,126 @@
   @apply transition-all duration-500 ease-in-out;
 }
 
-/* Motion Background Styles */
-.bg-weather {
-  background: linear-gradient(to bottom, #83a4d4, #b6fbff);
+/* Fluid Motion Background Styles */
+.bg-home-fluid {
+  background: linear-gradient(to bottom, #125D98, #3C8DAD, #92E3FD);
 }
 
-.bg-health {
-  background: linear-gradient(to bottom, #56ab2f, #a8e063);
+.bg-weather-fluid {
+  background: linear-gradient(to bottom, #125D98, #3C8DAD, #92E3FD);
 }
 
-.bg-navigation {
-  background: linear-gradient(to bottom, #4b6cb7, #182848);
+.bg-health-fluid {
+  background: linear-gradient(to bottom, #05445E, #189AB4, #75E6DA);
 }
 
-.bg-chatbot {
-  background: linear-gradient(to bottom, #9D50BB, #6E48AA);
+.bg-navigation-fluid {
+  background: linear-gradient(to bottom, #1A374D, #406882, #6998AB);
 }
 
-.bg-home {
-  background: linear-gradient(to bottom, #2980B9, #6DD5FA, #FFFFFF);
+.bg-chatbot-fluid {
+  background: linear-gradient(to bottom, #184E77, #1E6091, #1A759F);
 }
 
-.bg-drone-simulator {
-  background: linear-gradient(to bottom, #304352, #485563, #2b5876);
+.bg-drone-simulator-fluid {
+  background: linear-gradient(to bottom, #053B50, #176B87, #64CCC5);
 }
 
-/* Weather Spirit Motion Elements */
-.weather-clouds {
+/* Fluid element styles */
+.fluid-pipe {
+  position: absolute;
+  background: linear-gradient(90deg, rgba(0, 210, 255, 0), rgba(0, 210, 255, 0.3), rgba(0, 210, 255, 0));
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 210, 255, 0.2);
+}
+
+.fluid-pipe.horizontal {
+  left: 0;
+  right: 0;
+  animation: flow-animation 10s linear infinite;
+  background-size: 200% 100%;
+}
+
+.fluid-pipe.vertical {
+  top: 0;
+  bottom: 0;
+  animation: flow-animation 10s linear infinite;
+  background-size: 100% 200%;
+}
+
+.node-glow {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 210, 255, 0.8);
+  box-shadow: 0 0 10px 5px rgba(0, 210, 255, 0.3);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.fluid-bubbles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.fluid-bubbles::before,
+.fluid-bubbles::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(0, 210, 255, 0.4);
+  box-shadow: 0 0 8px 2px rgba(0, 210, 255, 0.2);
+}
+
+.fluid-bubbles::before {
+  left: 20%;
+  animation: bubble-rise 15s linear infinite;
+}
+
+.fluid-bubbles::after {
+  left: 65%;
+  animation: bubble-rise 12s linear infinite;
+  animation-delay: 5s;
+}
+
+.bubble-effect {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.bubble-effect::before,
+.bubble-effect::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 210, 255, 0.3);
+  bottom: -10px;
+  animation: bubble-rise 10s ease-out infinite;
+}
+
+.bubble-effect::before {
+  left: 30%;
+}
+
+.bubble-effect::after {
+  left: 70%;
+  width: 6px;
+  height: 6px;
+  animation-delay: 3s;
+  animation-duration: 7s;
+}
+
+/* Weather Spirit fluid elements */
+.weather-fluid-clouds {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -279,17 +445,17 @@
   opacity: 0.7;
 }
 
-.weather-rain {
+.weather-fluid-rain {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(0, 210, 255, 0.3) 1px, transparent 1px);
   background-size: 20px 20px;
   animation: fall-rain 15s linear infinite;
   opacity: 0;
 }
 
-.weather-sun {
+.weather-fluid-sun {
   position: absolute;
   top: -100px;
   right: -100px;
@@ -300,167 +466,167 @@
   animation: rotate-sun 120s linear infinite;
 }
 
-.farming-crops {
+.farming-fluid-crops {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 100px;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="rgba(52,131,45,0.2)" d="M10,100 C30,70 45,85 50,75 C55,85 70,70 90,100 z"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="rgba(0,210,255,0.2)" d="M10,100 C30,70 45,85 50,75 C55,85 70,70 90,100 z"/></svg>');
   background-repeat: repeat-x;
   background-size: 100px 100px;
   animation: sway-crops 10s ease-in-out infinite;
 }
 
-/* Health Page Elements */
-.health-leaves {
+/* Health fluid elements */
+.health-fluid-leaves {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="rgba(52,131,45,0.1)" d="M20,50 C40,40 40,20 50,10 C60,20 60,40 80,50 C60,60 60,80 50,90 C40,80 40,60 20,50 z"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="rgba(0,210,255,0.1)" d="M20,50 C40,40 40,20 50,10 C60,20 60,40 80,50 C60,60 60,80 50,90 C40,80 40,60 20,50 z"/></svg>');
   background-size: 100px 100px;
   animation: float-leaves 30s linear infinite;
   opacity: 0.5;
 }
 
-.health-drops {
+.health-fluid-drops {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(circle, rgba(30,144,255,0.2) 2px, transparent 2px);
+  background-image: radial-gradient(circle, rgba(0, 210, 255, 0.3) 2px, transparent 2px);
   background-size: 40px 40px;
   animation: fall-drops 20s linear infinite;
 }
 
-.health-plants {
+.health-fluid-plants {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 150px;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="rgba(52,131,45,0.15)" d="M10,100 C20,80 15,70 20,60 C25,70 30,80 40,100 M30,100 C40,70 50,60 45,50 C50,60 60,70 70,100 M60,100 C70,80 65,70 70,60 C75,70 80,80 90,100" stroke="rgba(52,131,45,0.2)" stroke-width="1"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="rgba(0,210,255,0.15)" d="M10,100 C20,80 15,70 20,60 C25,70 30,80 40,100 M30,100 C40,70 50,60 45,50 C50,60 60,70 70,100 M60,100 C70,80 65,70 70,60 C75,70 80,80 90,100" stroke="rgba(0,210,255,0.2)" stroke-width="1"/></svg>');
   background-repeat: repeat-x;
   background-size: 150px 150px;
 }
 
-/* Navigation Page Elements */
-.nav-map-grid {
+/* Navigation fluid elements */
+.nav-fluid-grid {
   position: absolute;
   width: 100%;
   height: 100%;
   background-image: 
-    linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 210, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 210, 255, 0.1) 1px, transparent 1px);
   background-size: 20px 20px;
   animation: pulse-grid 10s ease-in-out infinite;
 }
 
-.nav-markers {
+.nav-fluid-markers {
   position: absolute;
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle, rgba(255,0,0,0.3) 3px, transparent 3px),
-    radial-gradient(circle at 50px 50px, rgba(0,255,0,0.3) 3px, transparent 3px),
-    radial-gradient(circle at 100px 100px, rgba(0,0,255,0.3) 3px, transparent 3px),
-    radial-gradient(circle at 150px 50px, rgba(255,255,0,0.3) 3px, transparent 3px);
+    radial-gradient(circle, rgba(255, 0, 128, 0.3) 3px, transparent 3px),
+    radial-gradient(circle at 50px 50px, rgba(0, 255, 128, 0.3) 3px, transparent 3px),
+    radial-gradient(circle at 100px 100px, rgba(0, 128, 255, 0.3) 3px, transparent 3px),
+    radial-gradient(circle at 150px 50px, rgba(255, 255, 0, 0.3) 3px, transparent 3px);
   background-size: 200px 200px;
   animation: pulse-markers 5s ease-in-out infinite;
 }
 
-.nav-drones {
+.nav-fluid-drones {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 2L12 7"/><path d="M12 17L12 22"/><path d="M2 12L7 12"/><path d="M17 12L22 12"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="rgba(0,210,255,0.3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 2L12 7"/><path d="M12 17L12 22"/><path d="M2 12L7 12"/><path d="M17 12L22 12"/></svg>');
   background-size: 120px 120px;
   animation: move-drones 40s linear infinite;
 }
 
-/* Chatbot Elements */
-.chat-bubbles {
+/* Chatbot fluid elements */
+.chat-fluid-bubbles {
   position: absolute;
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 50px 50px, rgba(255,255,255,0.2) 10px, transparent 10px),
-    radial-gradient(circle at 100px 100px, rgba(255,255,255,0.15) 15px, transparent 15px),
-    radial-gradient(circle at 150px 50px, rgba(255,255,255,0.1) 20px, transparent 20px),
-    radial-gradient(circle at 200px 150px, rgba(255,255,255,0.05) 25px, transparent 25px);
+    radial-gradient(circle at 50px 50px, rgba(0, 210, 255, 0.2) 10px, transparent 10px),
+    radial-gradient(circle at 100px 100px, rgba(0, 210, 255, 0.15) 15px, transparent 15px),
+    radial-gradient(circle at 150px 50px, rgba(0, 210, 255, 0.1) 20px, transparent 20px),
+    radial-gradient(circle at 200px 150px, rgba(0, 210, 255, 0.05) 25px, transparent 25px);
   background-size: 300px 300px;
   animation: float-bubbles 20s ease-in-out infinite;
 }
 
-.chat-waves {
+.chat-fluid-waves {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 40%;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="rgba(255,255,255,0.2)"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="rgba(255,255,255,0.15)"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="rgba(255,255,255,0.1)"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="rgba(0,210,255,0.2)"/><path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="rgba(0,210,255,0.15)"/><path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="rgba(0,210,255,0.1)"/></svg>');
   background-size: 100% 100%;
   animation: wave-motion 15s ease-in-out infinite alternate;
 }
 
-/* Drone Simulator Elements */
-.drone-grid {
+/* Drone simulator fluid elements */
+.drone-fluid-grid {
   position: absolute;
   inset: 0;
   background-image: 
-    linear-gradient(to right, rgba(20, 220, 100, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(20, 220, 100, 0.1) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 210, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 210, 255, 0.1) 1px, transparent 1px);
   background-size: 40px 40px;
   animation: pulse-grid 8s ease-in-out infinite;
 }
 
-.drone-particles {
+.drone-fluid-particles {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: radial-gradient(circle, rgba(0, 255, 150, 0.15) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(0, 210, 255, 0.15) 1px, transparent 1px);
   background-size: 20px 20px;
   animation: drift-particles 15s linear infinite;
 }
 
-.drone-path {
+.drone-fluid-path {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,50 Q30,20 50,50 T90,50" stroke="rgba(0, 255, 150, 0.2)" stroke-width="1.5" fill="none" stroke-dasharray="4" /></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M10,50 Q30,20 50,50 T90,50" stroke="rgba(0,210,255,0.2)" stroke-width="1.5" fill="none" stroke-dasharray="4" /></svg>');
   background-size: 200px 200px;
   animation: move-path 30s linear infinite;
 }
 
-.drone-fields {
+.drone-fluid-fields {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 70%;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><rect x="0" y="80" width="20" height="20" fill="rgba(20, 100, 20, 0.1)" /><rect x="20" y="80" width="20" height="20" fill="rgba(30, 110, 30, 0.1)" /><rect x="40" y="80" width="20" height="20" fill="rgba(20, 100, 20, 0.1)" /><rect x="60" y="80" width="20" height="20" fill="rgba(30, 110, 30, 0.1)" /><rect x="80" y="80" width="20" height="20" fill="rgba(20, 100, 20, 0.1)" /><rect x="0" y="60" width="20" height="20" fill="rgba(30, 110, 30, 0.1)" /><rect x="20" y="60" width="20" height="20" fill="rgba(20, 100, 20, 0.1)" /><rect x="40" y="60" width="20" height="20" fill="rgba(30, 110, 30, 0.1)" /><rect x="60" y="60" width="20" height="20" fill="rgba(20, 100, 20, 0.1)" /><rect x="80" y="60" width="20" height="20" fill="rgba(30, 110, 30, 0.1)" /></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><rect x="0" y="80" width="20" height="20" fill="rgba(0,210,255,0.1)" /><rect x="20" y="80" width="20" height="20" fill="rgba(0,210,255,0.1)" /><rect x="40" y="80" width="20" height="20" fill="rgba(0,210,255,0.1)" /><rect x="60" y="80" width="20" height="20" fill="rgba(0,210,255,0.1)" /><rect x="80" y="80" width="20" height="20" fill="rgba(0,210,255,0.1)" /><rect x="0" y="60" width="20" height="20" fill="rgba(0,210,255,0.1)" /><rect x="20" y="60" width="20" height="20" fill="rgba(0,210,255,0.1)" /><rect x="40" y="60" width="20" height="20" fill="rgba(0,210,255,0.1)" /><rect x="60" y="60" width="20" height="20" fill="rgba(0,210,255,0.1)" /><rect x="80" y="60" width="20" height="20" fill="rgba(0,210,255,0.1)" /></svg>');
   background-size: 100px 100px;
   opacity: 0.5;
 }
 
-/* Home Page Elements */
-.home-particles {
+/* Home fluid elements */
+.home-fluid-particles {
   position: absolute;
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px),
-    radial-gradient(circle at 50px 50px, rgba(255,255,255,0.2) 1px, transparent 1px);
+    radial-gradient(circle, rgba(0, 210, 255, 0.3) 1px, transparent 1px),
+    radial-gradient(circle at 50px 50px, rgba(0, 210, 255, 0.2) 1px, transparent 1px);
   background-size: 30px 30px;
   animation: float-particles 20s linear infinite;
 }
 
-.home-farming-elements {
+.home-fluid-elements {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
   height: 30%;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30"><path d="M10,30 C15,15 20,18 25,10 C30,18 35,15 40,30" stroke="rgba(52,131,45,0.2)" stroke-width="0.5" fill="none" /><path d="M30,30 C35,15 40,18 45,10 C50,18 55,15 60,30" stroke="rgba(52,131,45,0.2)" stroke-width="0.5" fill="none" /><path d="M50,30 C55,15 60,18 65,10 C70,18 75,15 80,30" stroke="rgba(52,131,45,0.2)" stroke-width="0.5" fill="none" /><path d="M70,30 C75,15 80,18 85,10 C90,18 95,15 100,30" stroke="rgba(52,131,45,0.2)" stroke-width="0.5" fill="none" /></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 30"><path d="M10,30 C15,15 20,18 25,10 C30,18 35,15 40,30" stroke="rgba(0,210,255,0.2)" stroke-width="0.5" fill="none" /><path d="M30,30 C35,15 40,18 45,10 C50,18 55,15 60,30" stroke="rgba(0,210,255,0.2)" stroke-width="0.5" fill="none" /><path d="M50,30 C55,15 60,18 65,10 C70,18 75,15 80,30" stroke="rgba(0,210,255,0.2)" stroke-width="0.5" fill="none" /><path d="M70,30 C75,15 80,18 85,10 C90,18 95,15 100,30" stroke="rgba(0,210,255,0.2)" stroke-width="0.5" fill="none" /></svg>');
   background-size: 100px 30px;
   background-repeat: repeat-x;
   animation: sway-plants 15s ease-in-out infinite;
@@ -496,14 +662,14 @@
 @keyframes rotate-sun {
   0% {
     transform: rotate(0deg);
-    box-shadow: 0 0 50px rgba(255,165,0,0.2);
+    box-shadow: 0 0 50px rgba(0, 210, 255, 0.2);
   }
   50% {
-    box-shadow: 0 0 100px rgba(255,165,0,0.4);
+    box-shadow: 0 0 100px rgba(0, 210, 255, 0.4);
   }
   100% {
     transform: rotate(360deg);
-    box-shadow: 0 0 50px rgba(255,165,0,0.2);
+    box-shadow: 0 0 50px rgba(0, 210, 255, 0.2);
   }
 }
 
