@@ -1,30 +1,27 @@
 
 import React from "react";
+import { Drone3DScene } from "./Drone3DScene";
+import { DronePosition, DroneGameState } from "@/types/drone";
 
 interface DroneCameraViewProps {
-  dronePosition: {
-    x: number;
-    y: number;
-    altitude: number;
-    rotation: number;
-  };
+  dronePosition: DronePosition;
+  gameState: DroneGameState;
+  isDroneOn: boolean;
 }
 
-export const DroneCameraView: React.FC<DroneCameraViewProps> = ({ dronePosition }) => {
+export const DroneCameraView: React.FC<DroneCameraViewProps> = ({ 
+  dronePosition, 
+  gameState,
+  isDroneOn 
+}) => {
   return (
-    <div className="relative w-full h-[400px] bg-gray-900 flex items-center justify-center overflow-hidden">
-      {/* Camera View */}
-      <div 
-        className="w-full h-full bg-cover bg-center"
-        style={{
-          backgroundImage: "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\"><rect fill=\"%23205020\" width=\"50\" height=\"50\" /><rect fill=\"%23307030\" x=\"50\" width=\"50\" height=\"50\" /><rect fill=\"%23307030\" y=\"50\" width=\"50\" height=\"50\" /><rect fill=\"%23205020\" x=\"50\" y=\"50\" width=\"50\" height=\"50\" /></svg>')",
-          backgroundSize: `${200 - dronePosition.altitude}px`,
-          filter: `brightness(${0.7 + dronePosition.altitude / 200})`,
-          transform: `rotate(${-dronePosition.rotation}deg) scale(1.2)`,
-          transformOrigin: 'center',
-          transition: 'all 0.5s ease-out',
-        }}
-      ></div>
+    <div className="relative w-full h-[400px] bg-gray-900 overflow-hidden">
+      {/* 3D Drone View */}
+      <Drone3DScene 
+        dronePosition={dronePosition}
+        gameState={gameState}
+        isDroneOn={isDroneOn}
+      />
       
       {/* Drone camera overlay */}
       <div className="absolute inset-0 pointer-events-none border-4 border-black/80">

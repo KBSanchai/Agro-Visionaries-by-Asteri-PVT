@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/Layout";
 import { Card } from "@/components/ui/card";
@@ -418,7 +417,7 @@ const DroneSimulator: React.FC = () => {
                     </TabsTrigger>
                     <TabsTrigger value="camera" className="data-[state=active]:bg-green-500/20">
                       <Camera className="h-4 w-4 mr-1" />
-                      Camera View
+                      Camera View (3D)
                     </TabsTrigger>
                   </TabsList>
                   
@@ -454,7 +453,11 @@ const DroneSimulator: React.FC = () => {
                 </TabsContent>
                 
                 <TabsContent value="camera" className="m-0">
-                  <DroneCameraView dronePosition={dronePosition} />
+                  <DroneCameraView 
+                    dronePosition={dronePosition} 
+                    gameState={gameState}
+                    isDroneOn={isDroneOn}
+                  />
                 </TabsContent>
               </Tabs>
               
